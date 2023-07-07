@@ -4,6 +4,7 @@ var resultEl = document.querySelector("#result");
 var descriptionEl = document.querySelector("#description");
 
 function activateSearchBtn() {
+
     var userInput = userInputEl.value;
     console.log(userInput);
     var baseUrl = 'https://api.spoonacular.com/recipes/complexSearch';
@@ -22,16 +23,21 @@ function activateSearchBtn() {
             for (var i = 0; i < data.results.length; i++) {
                 var tag = document.createElement('a');
                 tag.setAttribute("href", "#");
-                tag.setAttribute("class", "block");
+                tag.setAttribute("style", "display: inline; margin-bottom:20px; margin-left:20px; margin-right:80px");
                 tag.setAttribute("data-id", data.results[i].id);
                 tag.textContent = data.results[i].title;
                 console.log(data.results[i].title);
+                var img = document.createElement('img');
+                var source = data.results[i].image
+                img.setAttribute("src", source);
+                resultEl.appendChild(img);
                 resultEl.appendChild(tag);
             }
         });
 }
 
 resultEl.addEventListener("click", function (event) {
+    
     var element = event.target;
 
     if (element.matches("a") === true) {
