@@ -9,6 +9,7 @@ var mainCourseEl = document.querySelector("#dropdown2");
 var sideDishEl = document.querySelector("#dropdown3");
 var dessertEl = document.querySelector("#dropdown4");
 var favFoodEl = document.querySelector("#fav-food");
+var heroImageEl = document.querySelector("#hero-image");
 
 var allLiked = [];
 
@@ -77,6 +78,7 @@ function activateSearchBtn() {
         .then(function (data) {
             console.log(data);
             console.log(data.results.length);
+            heroImageEl.remove();
             for (var i = 0; i < data.results.length; i++) {
                 var card = makeRecipeCard(data.results[i]);
                 resultEl.appendChild(card);
@@ -258,6 +260,7 @@ breakfastEl.addEventListener("click", function (event) {
             return response.json();
         })
         .then(data => {
+            heroImageEl.remove();
             for (var i = 0; i < data.results.length; i++) {
                 var card = makeRecipeCard(data.results[i]);
                 resultEl.appendChild(card);
@@ -299,6 +302,7 @@ mainCourseEl.addEventListener("click", function (event) {
         .then(function (data) {
             console.log(data);
             console.log(data.results.length);
+            heroImageEl.remove();
             for (var i = 0; i < data.results.length; i++) {
                 var card = makeRecipeCard(data.results[i]);
                 resultEl.appendChild(card);
@@ -339,6 +343,7 @@ sideDishEl.addEventListener("click", function (event) {
         .then(function (data) {
             console.log(data);
             console.log(data.results.length);
+            heroImageEl.remove();
             for (var i = 0; i < data.results.length; i++) {
                 var card = makeRecipeCard(data.results[i]);
                 resultEl.appendChild(card);
@@ -379,6 +384,7 @@ dessertEl.addEventListener("click", function (event) {
         .then(function (data) {
             console.log(data);
             console.log(data.results.length);
+            heroImageEl.remove();
             for (var i = 0; i < data.results.length; i++) {
                 var card = makeRecipeCard(data.results[i]);
                 resultEl.appendChild(card);
