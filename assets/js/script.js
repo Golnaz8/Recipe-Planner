@@ -8,6 +8,7 @@ var breakfastEl = document.querySelector("#dropdown1");
 var mainCourseEl = document.querySelector("#dropdown2");
 var sideDishEl = document.querySelector("#dropdown3");
 var dessertEl = document.querySelector("#dropdown4");
+var favFoodEl = document.querySelector("#fav-food");
 
 var allLiked = [];
 
@@ -58,7 +59,9 @@ function activateSearchBtn() {
 
 
     var userInput = userInputEl.value;
-    // userInputEl.value = " ";
+    userInputEl.value = " ";
+
+    if (userInput){
 
     console.log(userInput);
     var baseUrl = 'https://api.spoonacular.com/recipes/complexSearch';
@@ -79,6 +82,9 @@ function activateSearchBtn() {
                 resultEl.appendChild(card);
             }
         });
+    }else {
+        return;
+    }    
 
 }
 
@@ -429,12 +435,6 @@ function allLikedRender() {
 }
 
 
-
-
-
-
-
-
-
-
-
+favFoodEl.addEventListener('click',  function() {
+    window.location.href = "favs.html";
+});

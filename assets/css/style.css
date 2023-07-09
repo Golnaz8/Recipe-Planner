@@ -53,3 +53,9 @@ img {
     justify-content: end;
     margin-top: 20px;
 }
+
+#btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
