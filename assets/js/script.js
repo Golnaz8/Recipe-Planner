@@ -2,11 +2,11 @@
 
 // Important - use your own personal keys to avoid hitting rate limits too often
 
-var nutritionixKey = "bd89972978beea9da43d3840c32eedf9";
-var nutritionixAppId = "f3463952";
+var nutritionixKey = "use your personal key";
+var nutritionixAppId = "use your personal app ID";
 var nutritionixUrl = "https://trackapi.nutritionix.com/v2/natural/nutrients";
 
-var spoonacularKey = "c483c6abaa8c4cd59559ac1eb0ff2720";
+var spoonacularKey = "use your personal key";
 
 
 var searchBtnEl = document.querySelector(".search-btn");
@@ -97,7 +97,8 @@ if (likedFood) {
     recipeDiv.appendChild(img);
     recipeDiv.appendChild(favIcon);
     var tag = document.createElement('a');
-    tag.setAttribute("href", "#");
+    tag.setAttribute("href", "#modal1");
+    tag.setAttribute("class", "btn modal-trigger");
     tag.setAttribute("data-id", recipe.id);
     tag.textContent = recipe.title;
     console.log(recipe.title);
@@ -186,8 +187,9 @@ resultEl.addEventListener("click", function (event) {
             console.log(data.extendedIngredients.length);
 
             computeCalories(data);
-        });
-    fetch(`https://api.spoonacular.com/recipes/${inputId}/analyzedInstructions?apiKey=${spoonacularKey}`, {
+        })
+        .then(function(calories){
+            fetch(`https://api.spoonacular.com/recipes/${inputId}/analyzedInstructions?apiKey=${spoonacularKey}`, {
         method: 'GET',
         credentials: 'same-origin',
         redirect: 'follow',
@@ -205,6 +207,9 @@ resultEl.addEventListener("click", function (event) {
             }
         });
 
+        });
+        
+    
 });
 
 searchBtnEl.addEventListener('click', activateSearchBtn);
@@ -231,6 +236,7 @@ function getNutritionPromise(item, caloriesHeading) {
         return response.json();
     })
     .then( data => {
+        console.log(data);
         var calories = 0;
         if (data.foods.length === 1) {
             calories = data.foods[0].nf_calories;
@@ -269,7 +275,7 @@ function computeCalories(data) {
             caloriesHeading);
     }
 
-
+    
 }
 
 
@@ -451,6 +457,51 @@ dessertEl.addEventListener("click", function (event) {
 
 });
 
+// Initialize the modal
+document.addEventListener('DOMContentLoaded', function () {
+    var modals = document.querySelectorAll('.modal');
+    M.Modal.init(modals);
+
+    // Add event listeners to the dropdown triggers
+    var dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
+    dropdownTriggers.forEach(function (trigger) {
+        trigger.addEventListener('click', function () {
+            var cuisine = this.id;
+            fetchAndDisplayContent("#description-" + cuisine);
+        });
+    });
+
+    // Add event listeners to the recipe names
+    var recipeNames = document.querySelectorAll('.recipe-name');
+    recipeNames.forEach(function (name) {
+        name.addEventListener('click', function () {
+            var description = this.getAttribute('data-description');
+            displayModalDescription(description);
+        });
+    });
+});
+
+// Function to fetch HTML tag content and display it in a modal
+function fetchAndDisplayContent(tagId) {
+    var tagElement = document.querySelector(tagId);
+    if (tagElement) {
+        var content = tagElement.innerHTML;
+        // Display the content in a modal
+        var modal = M.Modal.getInstance(document.querySelector('#modal1'));
+        modal.open();
+        var modalContent = document.querySelector('.modal-content');
+        modalContent.innerHTML = content;
+    }
+}
+
+// Function to display the description in the modal
+function displayModalDescription(description) {
+    // Display the description in a modal
+    var modal = M.Modal.getInstance(document.querySelector('#modal1'));
+    modal.open();
+    var modalDescription = document.querySelector('#modal-description');
+    modalDescription.textContent = description;
+}
 
 //when user click on heart of each food, it saves that isliked food in local storage
 // and change the empty heart to full heart as an isliked
