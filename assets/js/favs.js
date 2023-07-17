@@ -44,7 +44,8 @@ showSavedBtn.addEventListener('click', function () {
                     img.setAttribute("src", source);
                     recipeDiv.appendChild(img);
                     var tag = document.createElement('a');
-                    tag.setAttribute("href", "#");
+                    tag.setAttribute("href", "#modal1");	
+                    tag.setAttribute("class", "btn modal-trigger");
                     //----------------------------------------------------
                     tag.setAttribute("data-id", data.id);
                     //----------------------------------------------------
@@ -95,8 +96,9 @@ favListEl.addEventListener("click", function (event) {
                 ingreLine.textContent = data.extendedIngredients[i].original;
                 instractionEl.appendChild(ingreLine);
             }
-        });
-    fetch(`https://api.spoonacular.com/recipes/${inputId}/analyzedInstructions?apiKey=${spoonacularKey}`, {
+        })
+        .then(function(calories){
+            fetch(`https://api.spoonacular.com/recipes/${inputId}/analyzedInstructions?apiKey=${spoonacularKey}`, {
         method: 'GET',
         credentials: 'same-origin',
         redirect: 'follow',
@@ -113,6 +115,53 @@ favListEl.addEventListener("click", function (event) {
                 instractionEl.appendChild(descLine);
             }
         });
+    
+        });
 
 });
 
+// Initialize the modal
+document.addEventListener('DOMContentLoaded', function () {
+    var modals = document.querySelectorAll('.modal');
+    M.Modal.init(modals);
+
+    // Add event listeners to the dropdown triggers
+    var dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
+    dropdownTriggers.forEach(function (trigger) {
+        trigger.addEventListener('click', function () {
+            var cuisine = this.id;
+            fetchAndDisplayContent("#description-" + cuisine);
+        });
+    });
+
+    // Add event listeners to the recipe names
+    var recipeNames = document.querySelectorAll('.recipe-name');
+    recipeNames.forEach(function (name) {
+        name.addEventListener('click', function () {
+            var description = this.getAttribute('data-description');
+            displayModalDescription(description);
+        });
+    });
+});
+
+// Function to fetch HTML tag content and display it in a modal
+function fetchAndDisplayContent(tagId) {
+    var tagElement = document.querySelector(tagId);
+    if (tagElement) {
+        var content = tagElement.innerHTML;
+        // Display the content in a modal
+        var modal = M.Modal.getInstance(document.querySelector('#modal1'));
+        modal.open();
+        var modalContent = document.querySelector('.modal-content');
+        modalContent.innerHTML = content;
+    }
+}
+
+// Function to display the description in the modal
+function displayModalDescription(description) {
+    // Display the description in a modal
+    var modal = M.Modal.getInstance(document.querySelector('#modal1'));
+    modal.open();
+    var modalDescription = document.querySelector('#modal-description');
+    modalDescription.textContent = description;
+}

@@ -65,7 +65,8 @@ if (likedFood) {
     recipeDiv.appendChild(img);
     recipeDiv.appendChild(favIcon);
     var tag = document.createElement('a');
-    tag.setAttribute("href", "#");
+    tag.setAttribute("href", "#modal1");	
+    tag.setAttribute("class", "btn modal-trigger");
     tag.setAttribute("data-id", recipe.id);
     tag.textContent = recipe.title;
     console.log(recipe.title);
@@ -150,8 +151,9 @@ resultEl.addEventListener("click", function (event) {
             console.log(data.extendedIngredients.length);
 
             computeCalories(data);
-        });
-    fetch(`https://api.spoonacular.com/recipes/${inputId}/analyzedInstructions?apiKey=${spoonacularKey}`, {
+        })
+        .then(function(calories){
+            fetch(`https://api.spoonacular.com/recipes/${inputId}/analyzedInstructions?apiKey=${spoonacularKey}`, {
         method: 'GET',
         credentials: 'same-origin',
         redirect: 'follow',
@@ -167,6 +169,8 @@ resultEl.addEventListener("click", function (event) {
                 descLine.textContent = data[0].steps[i].step;
                 descriptionEl.appendChild(descLine);
             }
+        });
+    
         });
 
 });
@@ -586,6 +590,51 @@ sideNavDessertEl.addEventListener("click", function (event) {
         sidenavInstance.close();
 });
 
+// Initialize the modal
+document.addEventListener('DOMContentLoaded', function () {
+    var modals = document.querySelectorAll('.modal');
+    M.Modal.init(modals);
+
+    // Add event listeners to the dropdown triggers
+    var dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
+    dropdownTriggers.forEach(function (trigger) {
+        trigger.addEventListener('click', function () {
+            var cuisine = this.id;
+            fetchAndDisplayContent("#description-" + cuisine);
+        });
+    });
+
+    // Add event listeners to the recipe names
+    var recipeNames = document.querySelectorAll('.recipe-name');
+    recipeNames.forEach(function (name) {
+        name.addEventListener('click', function () {
+            var description = this.getAttribute('data-description');
+            displayModalDescription(description);
+        });
+    });
+});
+
+// Function to fetch HTML tag content and display it in a modal
+function fetchAndDisplayContent(tagId) {
+    var tagElement = document.querySelector(tagId);
+    if (tagElement) {
+        var content = tagElement.innerHTML;
+        // Display the content in a modal
+        var modal = M.Modal.getInstance(document.querySelector('#modal1'));
+        modal.open();
+        var modalContent = document.querySelector('.modal-content');
+        modalContent.innerHTML = content;
+    }
+}
+
+// Function to display the description in the modal
+function displayModalDescription(description) {
+    // Display the description in a modal
+    var modal = M.Modal.getInstance(document.querySelector('#modal1'));
+    modal.open();
+    var modalDescription = document.querySelector('#modal-description');
+    modalDescription.textContent = description;
+}
 
 //when user click on heart of each food, it saves that isliked food in local storage
 // and change the empty heart to full heart as an isliked
