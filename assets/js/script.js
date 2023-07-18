@@ -1,9 +1,9 @@
 
-var nutritionixKey = "63b6c4c634c4ce5d9d4d97039f019336";
-var nutritionixAppId = "0565cfa4";
+var nutritionixKey = "14be12f9f530772264d942435d5a0e63";
+var nutritionixAppId = "768112d4";
 var nutritionixUrl = "https://trackapi.nutritionix.com/v2/natural/nutrients";
 
-var spoonacularKey = "5c3c7f61c1234b6f8841a0292e529a78";
+var spoonacularKey = "4b9fe343ff764f7494d88321c248a6ee";
 
 
 var searchBtnEl = document.querySelector(".search-btn");
